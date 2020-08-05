@@ -155,7 +155,7 @@ class Spider:
         data = dict(page='2', zc='1')
         self._gotoUrl('https://dean.bjtu.edu.cn/classroom/timeholdresult/room_stat', data=data)
 
-    #杂项
+    #杂项 获取
     def Others(self):
         #jjgq_ip:15天内过期的ip
         #ip_count:名下共有ip地址
