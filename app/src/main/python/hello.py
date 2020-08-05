@@ -8,7 +8,6 @@ class Spider:
     session = requests.session()
     session.cookies=CookieJar()
 
-
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Safari/537.36'
         ,'Referer':"https://cas.bjtu.edu.cn/auth/login/"
@@ -144,6 +143,82 @@ class Spider:
         GPA=round(GPA/total,2)
         AVG=round(AVG/total,2)
         return GPA,AVG
+    #空闲教室
+    def getClassRoom(self):
+        self._gotoUrl("https://mis.bjtu.edu.cn/module/module/10")
+        self._gotoUrl(
+            bs4.BeautifulSoup(self.page.text, 'html.parser').find(
+                id='redirect'
+            ).attrs['action']
+        )
+
+        data = dict(page='2', zc='1')
+        self._gotoUrl('https://dean.bjtu.edu.cn/classroom/timeholdresult/room_stat', data=data)
+
+    #杂项
+    def Others(self):
+        #jjgq_ip:15天内过期的ip
+        #ip_count:名下共有ip地址
+        #net_fee:网费
+        #ecard_year:一卡通余额
+        self._gotoUrl('https://mis.bjtu.edu.cn/home/')
+        self._gotoUrl('https://mis.bjtu.edu.cn/osys_ajax_wrap/')
+        return {'15天内将过期的ip':re.findall(re.compile(r'(?<=jjgq_ip\": \").+?(?=\")'),self.page.text)[0],
+                'IP地址数量':re.findall(re.compile(r'(?<=ip_count\": \").+?(?=\")'),self.page.text)[0],
+                '网费余额':re.findall(re.compile(r'(?<=net_fee\": \").+?(?=\")'),self.page.text)[0],
+                '一卡通余额':re.findall(re.compile(r'(?<=ecard_yuer\": ).+?(?=,)'),self.page.text)[0],
+                '未读邮件数':re.findall(re.compile(r'(?<=newmail_count\": \").+?(?=\")'),self.page.text)[0]
+                }
+
+    # 查看邮件
+    def getEmail(self):
+        self._gotoUrl('https://mis.bjtu.edu.cn/home/')
+        self._gotoUrl('https://mis.bjtu.edu.cn/module/module/26')
+        str = self.page.text[self.page.text.find('<body>'):]
+        datas = {}
+        key_pattern = re.compile(r'(?<=name=\").+?(?=\")')
+        keys = re.findall(key_pattern, str)
+        value_pattern = re.compile(r'(?<=value=\").+?(?=\")')
+        values = re.findall(value_pattern, str)
+        for i in range(len(keys)):
+            datas[keys[i]] = values[i].replace('@', '%40')
+
+        self._gotoUrl("https://mail.bjtu.edu.cn/coremail/cmcu_addon/coremailsso.jsp", data=datas)
+        sid = self.page.url[self.page.url.find('sid=') + 4:]
+        datas = {
+            'sid': sid,
+            'func': 'mbox%3AlistMessages'
+        }
+        self._gotoUrl('https://mail.bjtu.edu.cn/coremail/s/json', data=datas)
+
+        email_ids = re.findall(re.compile(r'(?<=\"id\":\").+?(?=\",\n)'), self.page.text)
+        email_senders = re.findall(re.compile(r'(?<=\"from\":\").+?(?=,\n)'), self.page.text)
+        email_subjects = re.findall(re.compile(r'(?<=\"subject\":\").+?(?=,)'), self.page.text)
+        email_Date = re.findall(re.compile(r'(?<=\"sentDate\":\").+?(?=\",\n)'), self.page.text)
+        email_isread = re.findall(re.compile(r'(?<=\"read\":).+?(?=,\n)'), self.page.text)
+
+        email = []
+        for i in range(len(email_ids)):
+            if (email_senders[i].find(self.loginname) != -1):
+                email_isread.insert(i, 'None')
+            email.append((email_ids[i], email_senders[i].replace('\\', ''), email_subjects[i], email_Date[i],
+                          email_isread[i].replace('}', '')))
+        email.sort(key=lambda x: x[3], reverse=True)
+
+        # 第一个参数获取邮件内容
+        return email
+
+    # https://mail.bjtu.edu.cn/coremail/XT5/jsp/viewMailHTML.jsp 一个mid(id) 确定邮件内容
+    def _extract_from_mid(self, mid):
+        self._gotoUrl('https://mail.bjtu.edu.cn/coremail/XT5/jsp/viewMailHTML.jsp', data={
+            'mid': mid
+        })
+        try:
+            return eval(repr(bs4.BeautifulSoup(
+                re.findall(re.compile(r'(?<=var mainPartContent = \(\').+?(?=\'\))'),
+                           self.page.text)[0], 'lxml').get_text()).replace('\\\\', '\\'))
+        except:
+            pass
 
 def getgrade(loginname,password):
     # loginname=input("请输入学号")
