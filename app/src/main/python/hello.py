@@ -143,17 +143,43 @@ class Spider:
         GPA=round(GPA/total,2)
         AVG=round(AVG/total,2)
         return GPA,AVG
-    #空闲教室
-    def getClassRoom(self):
+
+
+    # 空闲教室 获取今天的空闲教室信息
+    # #fff 为空闲教室
+    def getClassRoom(self, start_page=1, end_page=13):
         self._gotoUrl("https://mis.bjtu.edu.cn/module/module/10")
         self._gotoUrl(
             bs4.BeautifulSoup(self.page.text, 'html.parser').find(
                 id='redirect'
             ).attrs['action']
         )
+        weekday = "星期" + str(self.dateinfo[0][2])
+        # 今天空闲教室信息
+        information = {"第" + str(i) + "节": [] for i in range(1, 8)}
+        # zc:教学周
+        # page:1~12
+        for page in range(start_page, end_page):
+            if page == 5 or page == 11:
+                time.sleep(1)
+            if page == 7:
+                time.sleep(2)
+            data = dict(page=str(page), zc=str(self.dateinfo[1]))
+            self._gotoUrl('https://dean.bjtu.edu.cn/classroom/timeholdresult/room_stat', data=data)
+            analyer = bs4.BeautifulSoup(self.page.text, 'html.parser')
+            for line in analyer.find_all('tr'):
+                if len(line.find_all('td')) == 50:
+                    for i, item in enumerate(line.find_all('td')):
+                        # print(item)
+                        if i == 0:
+                            room = item.text
+                        elif item.attrs['title'].find(weekday) >= 0 and item.attrs['style'].find('#fff') >= 0:
+                            information[item.attrs['title'][item.attrs['title'].find(weekday) + 4:]].append(room)
 
-        data = dict(page='2', zc='1')
-        self._gotoUrl('https://dean.bjtu.edu.cn/classroom/timeholdresult/room_stat', data=data)
+        for keys in information.keys():
+            print(keys, information[keys])
+        #(第i节:教室列表)
+        return information
 
     #杂项 获取
     def Others(self):
