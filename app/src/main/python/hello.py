@@ -4,6 +4,9 @@ import requests
 from java import jclass
 import selenium
 from selenium import webdriver
+import re
+import time, datetime
+
 class Spider:
     session = requests.session()
     session.cookies=CookieJar()
@@ -12,11 +15,15 @@ class Spider:
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Safari/537.36'
         ,'Referer':"https://cas.bjtu.edu.cn/auth/login/"
     }
+    start_day = [2020, 8, 3]
+
 
 
     def __init__(self,loginname,password):
-        self.grade=set()
-        self.lesson={}
+        self.grade = set()
+        self.lesson = {}
+        self.loginname = loginname
+        self.password = password
         self.page = self.session.get("https://cas.bjtu.edu.cn/auth/login/", headers={
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Safari/537.36'})
         dic = {}
@@ -25,30 +32,36 @@ class Spider:
             if (line.attrs['name'] == 'loginname'):
                 break
             dic[line.attrs['name']] = line.attrs['value']
-        dic['loginname']=loginname
-        dic['password']=password
-        self.page=self.session.post("https://cas.bjtu.edu.cn/auth/login/",
-                                    data=dic,headers=self.headers)
+        dic['loginname'] = loginname
+        dic['password'] = password
+        self.page = self.session.post("https://cas.bjtu.edu.cn/auth/login/",
+                                      data=dic, headers=self.headers)
+
+        # 得到日期 0:(year, num_week, week_day) 1: num_week to start
+        self.dateinfo = (datetime.date.today().isocalendar(),
+                         datetime.date.today().isocalendar()[1] - datetime.date(*self.start_day).isocalendar()[1] + 1)
 
     def getGrade(self):
-        if(self.grade):
+        if (self.grade):
             return self.grade
         self._gotoUrl("https://mis.bjtu.edu.cn/module/module/10")
         self._gotoUrl(
-            bs4.BeautifulSoup(self.page.text,'html.parser').find(
+            bs4.BeautifulSoup(self.page.text, 'html.parser').find(
                 id='redirect'
             ).attrs['action']
         )
         self._gotoUrl('https://dean.bjtu.edu.cn/score/scores/stu/view/')
 
-
-        self.grade=self.grade.union(set(self.get_page_grade(
+        self.grade = self.grade.union(set(self.get_page_grade(
             self.page
         )))
-        for i in range(1,5):
-            self._gotoUrl('https://dean.bjtu.edu.cn/score/scores/stu/view/?ctype=ln&page='+str(i))
-            self.grade = self.grade.union(set(self.get_page_grade(self.page)))
+
+        datas = dict(page='1', perpage='500', ctype='ln')
+        self._gotoUrl('https://dean.bjtu.edu.cn/score/scores/stu/view/', data=datas)
+        self.grade = self.grade.union(set(self.get_page_grade(self.page)))
         return self.grade
+
+
     def get_page_grade(self,r):
         grade_selector = bs4.BeautifulSoup(self.page.text, 'html.parser')
         grade_set = []
@@ -73,9 +86,17 @@ class Spider:
             grade_set.append(tuple(buffer))
         return grade_set
 
-    def _gotoUrl(self,next_url):
-        self.headers['Referer']=self.page.url
-        self.page=self.session.get(next_url,headers=self.headers)
+    def _gotoUrl(self, next_url, data=None):
+        self.headers['Referer'] = self.page.url
+        if not data:
+            self.page = self.session.get(next_url, headers=self.headers)
+        else:
+            next_url += '?'
+            for i, keys in enumerate(data.keys()):
+                if i != 0:
+                    next_url += '&'
+                next_url += keys + '=' + data[keys]
+            self.page = self.session.get(next_url, headers=self.headers)
 
     def _Calc_GPA_AVG(self):
         self.getGrade()
@@ -147,7 +168,7 @@ class Spider:
 
     # 空闲教室 获取今天的空闲教室信息
     # #fff 为空闲教室
-    def getClassRoom(self, start_page=1, end_page=13):
+    def getClassRoom(self):
         self._gotoUrl("https://mis.bjtu.edu.cn/module/module/10")
         self._gotoUrl(
             bs4.BeautifulSoup(self.page.text, 'html.parser').find(
@@ -158,26 +179,17 @@ class Spider:
         # 今天空闲教室信息
         information = {"第" + str(i) + "节": [] for i in range(1, 8)}
         # zc:教学周
-        # page:1~12
-        for page in range(start_page, end_page):
-            if page == 5 or page == 11:
-                time.sleep(1)
-            if page == 7:
-                time.sleep(2)
-            data = dict(page=str(page), zc=str(self.dateinfo[1]))
-            self._gotoUrl('https://dean.bjtu.edu.cn/classroom/timeholdresult/room_stat', data=data)
-            analyer = bs4.BeautifulSoup(self.page.text, 'html.parser')
-            for line in analyer.find_all('tr'):
-                if len(line.find_all('td')) == 50:
-                    for i, item in enumerate(line.find_all('td')):
-                        # print(item)
-                        if i == 0:
-                            room = item.text
-                        elif item.attrs['title'].find(weekday) >= 0 and item.attrs['style'].find('#fff') >= 0:
-                            information[item.attrs['title'][item.attrs['title'].find(weekday) + 4:]].append(room)
-
-        for keys in information.keys():
-            print(keys, information[keys])
+        data = dict(page='1', zc=str(self.dateinfo[1]) , perpage='500')
+        self._gotoUrl('https://dean.bjtu.edu.cn/classroom/timeholdresult/room_stat', data=data)
+        analyer = bs4.BeautifulSoup(self.page.text, 'html.parser')
+        for line in analyer.find_all('tr'):
+            if len(line.find_all('td')) == 50:
+                for i, item in enumerate(line.find_all('td')):
+                    # print(item)
+                    if i == 0:
+                        room = item.text
+                    elif item.attrs['title'].find(weekday) >= 0 and item.attrs['style'].find('#fff') >= 0:
+                        information[item.attrs['title'][item.attrs['title'].find(weekday) + 4:]].append(room)
         #(第i节:教室列表)
         return information
 
@@ -189,12 +201,12 @@ class Spider:
         #ecard_year:一卡通余额
         self._gotoUrl('https://mis.bjtu.edu.cn/home/')
         self._gotoUrl('https://mis.bjtu.edu.cn/osys_ajax_wrap/')
-        return {'15天内将过期的ip':re.findall(re.compile(r'(?<=jjgq_ip\": \").+?(?=\")'),self.page.text)[0],
-                'IP地址数量':re.findall(re.compile(r'(?<=ip_count\": \").+?(?=\")'),self.page.text)[0],
-                '网费余额':re.findall(re.compile(r'(?<=net_fee\": \").+?(?=\")'),self.page.text)[0],
-                '一卡通余额':re.findall(re.compile(r'(?<=ecard_yuer\": ).+?(?=,)'),self.page.text)[0],
-                '未读邮件数':re.findall(re.compile(r'(?<=newmail_count\": \").+?(?=\")'),self.page.text)[0]
-                }
+        return [re.findall(re.compile(r'(?<=jjgq_ip\": \").+?(?=\")'),self.page.text)[0],
+                re.findall(re.compile(r'(?<=ip_count\": \").+?(?=\")'),self.page.text)[0],
+                re.findall(re.compile(r'(?<=net_fee\": \").+?(?=\")'),self.page.text)[0],
+                re.findall(re.compile(r'(?<=ecard_yuer\": ).+?(?=,)'),self.page.text)[0],
+                re.findall(re.compile(r'(?<=newmail_count\": \").+?(?=\")'),self.page.text)[0]
+                ]
 
     # 查看邮件
     def getEmail(self):
@@ -246,16 +258,34 @@ class Spider:
         except:
             pass
 
+
 def getgrade(loginname,password):
-    # loginname=input("请输入学号")
-    # password=input("请输入密码")
-    GradeBean=jclass("com.example.studentmagicbox.GradeBean")
+    GradeBean=jclass("com.example.studentmagicbox.Beans.GradeBean")
     net=Spider(loginname,password)
     result=net._Calc_GPA_AVG()
     jb=GradeBean(result[0],result[1])
-
     for x in net.getGrade():
-        GradeItem=jclass("com.example.studentmagicbox.GradeItem")
-        buffer=GradeItem(x[0],x[1][0],x[1][1],x[2],x[3],x[4])
-        jb.add_grade(buffer)
+        jb.add_grade(x[0],x[1][0],x[1][1],x[2],x[3],x[4])
+    return jb
+
+
+def getMail_and_Information(loginname,password):
+    EmailBean=jclass("com.example.studentmagicbox.Beans.EmailBean")
+    net=Spider(loginname,password)
+    jb=EmailBean()
+    for x in net.getEmail():
+        jb.add(x[0],x[1],x[2],x[3])
+    y=net.Others()
+    jb.set(y[0],y[1],y[2],y[3],y[4])
+    return jb
+
+def getClassRoom(loginname,password):
+    ClassroomBean=jclass("com.example.studentmagicbox.Beans.ClassroomBean")
+    net=Spider(loginname,password)
+    jb=ClassroomBean()
+    datas=net.getClassRoom()
+    jb.setTimeinfo(str(net.dateinfo))
+    for keys in datas.keys():
+       for values in datas[keys]:
+         jb.add(int(keys[1]),values)
     return jb
