@@ -11,10 +11,14 @@ public class GradeBean {
         this.GPA = GPA;
         this.AVG = AVG;
     }
+
+
     public void add_grade(String lesson_year, String lesson_id, String lesson_name, String lesson_weight, String lesson_grade, String lesson_teacher)
     {
         grades.add(new GradeItem(lesson_year,lesson_id,lesson_name,lesson_weight,lesson_grade,lesson_teacher));
     }
+
+
 
 
     public class GradeItem {
@@ -34,6 +38,8 @@ public class GradeBean {
             this.lesson_teacher = lesson_teacher;
         }
 
+
+
         @Override
         public String toString() {
             return "GradeItem{" +
@@ -47,6 +53,3 @@ public class GradeBean {
         }
     }
 }
-
-
-

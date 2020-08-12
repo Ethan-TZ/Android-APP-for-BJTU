@@ -86,6 +86,25 @@ class Spider:
             grade_set.append(tuple(buffer))
         return grade_set
 
+    def getTheClass(self):
+        self._gotoUrl("https://mis.bjtu.edu.cn/module/module/10")
+        self._gotoUrl(
+            bs4.BeautifulSoup(self.page.text, 'html.parser').find(
+                id='redirect'
+            ).attrs['action']
+        )
+        datas=dict(xnxq='2019-2020-2-2')
+        self._gotoUrl('https://dean.bjtu.edu.cn/course_selection/courseselect/stuschedule/',data=datas)
+        analyser=bs4.BeautifulSoup(self.page.text,'html.parser')
+        class_={i:{j:"" for j in range(1,8)} for i in  range(1,8) }
+        for i,lines in enumerate(analyser.find_all('tr')):
+            for j,item in enumerate(lines.find_all('td')):
+                if j>=1:
+                    for child in item.children:
+                        if child!='\n':
+                            class_[i][j]+=str(child.text.replace(' ','').replace('\n',' '))
+        return class_
+
     def _gotoUrl(self, next_url, data=None):
         self.headers['Referer'] = self.page.url
         if not data:
@@ -288,4 +307,14 @@ def getClassRoom(loginname,password):
     for keys in datas.keys():
        for values in datas[keys]:
          jb.add(int(keys[1]),values)
+    return jb
+
+def getSchedule(loginname,password):
+    ScheduleBean=jclass("com.example.studentmagicbox.Beans.ScheduleBean")
+    net=Spider(loginname,password)
+    jb=ScheduleBean()
+    datas=net.getTheClass()
+    for i in datas.keys():
+        for j in datas[i].keys():
+            jb.set(j,i,datas[i][j])
     return jb

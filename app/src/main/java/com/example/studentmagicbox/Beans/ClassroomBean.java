@@ -12,6 +12,8 @@ public class ClassroomBean {
     }
 
     public String timeinfo;
+
+
     public ClassroomBean() {
         for(int i=0;i<=6;++i)
             RoomList[i]=new ArrayList<>();
