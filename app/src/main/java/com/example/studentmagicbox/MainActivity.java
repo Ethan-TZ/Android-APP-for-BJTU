@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -24,7 +25,16 @@ public class MainActivity extends AppCompatActivity {
     EditText userlogin;
     EditText userpassword;
     Button check;
+    private int  SuccessCount=0;
 
+    private void SkipTo()
+    {
+        if(++SuccessCount==4)
+        {
+            startActivity(new Intent(MainActivity.this,MainContet.class));
+            finish();
+        }
+    }
 
     private void initPython() {
         if (!Python.isStarted()) {
@@ -62,14 +72,14 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+
     private Handler patchHandler,emailHandler,classHandler,scheduleHander;
 
-    private void Loding()
-    {
-        PyObject o=Python.getInstance().getModule("hello").callAttr("getgrade",loginname,password);
-        GradeBean data=o.toJava(GradeBean.class);
-        Toast.makeText(MainActivity.this,Float.toString(data.GPA),Toast.LENGTH_LONG).show();
-    }
+    public static ClassroomBean classroomBean;
+    public static EmailBean emailBean;
+    public static GradeBean gradeBean;
+    public static ScheduleBean scheduleBean;
 
     class LoadingThread extends  Thread {
         @SuppressLint("HandlerLeak")
@@ -82,9 +92,10 @@ public class MainActivity extends AppCompatActivity {
                 public void handleMessage(@NonNull Message msg) {
                     super.handleMessage(msg);
                     PyObject o = Python.getInstance().getModule("hello").callAttr("getgrade", loginname, password);
-                    GradeBean data = o.toJava(GradeBean.class);
-                    Toast.makeText(MainActivity.this, Float.toString(data.GPA), Toast.LENGTH_LONG).show();
+                    gradeBean = o.toJava(GradeBean.class);
+                    Toast.makeText(MainActivity.this, Float.toString(gradeBean.GPA), Toast.LENGTH_LONG).show();
                     System.out.println("成绩载入成功");
+                    SkipTo();
                 }
             };
             Looper.loop();
@@ -103,17 +114,17 @@ public class MainActivity extends AppCompatActivity {
                 public void handleMessage(@NonNull Message msg) {
                     super.handleMessage(msg);
                     PyObject o=Python.getInstance().getModule("hello").callAttr("getMail_and_Information",loginname,password);
-                    EmailBean data= o.toJava(EmailBean.class);
-                    for (EmailBean.EmailItem x:data.EmailList)
+                    emailBean= o.toJava(EmailBean.class);
+                    for (EmailBean.EmailItem x:emailBean.EmailList)
                         System.out.println(x);
-                    System.out.println(data.ecard_year);
+                    System.out.println(emailBean.ecard_year);
                     System.out.println("邮件载入成功！");
+                    SkipTo();
                 }
             };
             Looper.loop();
         }
     }
-
 
     class ClassRoomThread extends Thread{
         @Override
@@ -125,13 +136,14 @@ public class MainActivity extends AppCompatActivity {
                 public void handleMessage(@NonNull Message msg) {
                     super.handleMessage(msg);
                     PyObject o=Python.getInstance().getModule("hello").callAttr("getClassRoom",loginname,password);
-                    ClassroomBean data=o.toJava(ClassroomBean.class);
+                    classroomBean=o.toJava(ClassroomBean.class);
                     for(int i=0;i<=6;++i)
                     {
-                        System.out.println("第"+i+"节："+data.RoomList[i].size());
+                        System.out.println("第"+i+"节："+classroomBean.RoomList[i].size());
                     }
-                    System.out.println(data.timeinfo);
+                    System.out.println(classroomBean.timeinfo);
                     System.out.println("教室资源载入成功！");
+                    SkipTo();
                 }
             };
             Looper.loop();
@@ -149,11 +161,12 @@ public class MainActivity extends AppCompatActivity {
                 public void handleMessage(@NonNull Message msg) {
                     super.handleMessage(msg);
                     PyObject o=Python.getInstance().getModule("hello").callAttr("getSchedule",loginname,password);
-                    ScheduleBean data=o.toJava(ScheduleBean.class);
+                    scheduleBean=o.toJava(ScheduleBean.class);
                     for(int i=0;i<=6;++i)
                         for(int j=0;j<=6;++j)
-                            System.out.println(i+" "+j+data.schedule[i][j]);
+                            System.out.println(i+" "+j+scheduleBean.schedule[i][j]);
                         System.out.println("课表载入成功");
+                        SkipTo();
                 }
             };
             Looper.loop();
