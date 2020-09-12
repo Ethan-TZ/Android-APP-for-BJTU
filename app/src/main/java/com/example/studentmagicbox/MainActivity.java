@@ -53,10 +53,10 @@ public class MainActivity extends AppCompatActivity {
         {
             loginname=userlogin.getText().toString();
             password=userpassword.getText().toString();
-            emailHandler.obtainMessage(1,"11").sendToTarget();
-            patchHandler.obtainMessage(1,"11").sendToTarget();
-            classHandler.sendEmptyMessageDelayed(1,2780);
-            scheduleHander.sendEmptyMessageDelayed(1,3780);
+            emailHandler.sendEmptyMessageDelayed(1,0);
+            patchHandler.sendEmptyMessageDelayed(1,1000);
+            classHandler.sendEmptyMessageDelayed(1,4000);
+            scheduleHander.sendEmptyMessageDelayed(1,7000);
         });
     }
 
