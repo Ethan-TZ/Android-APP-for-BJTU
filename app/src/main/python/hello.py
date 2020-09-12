@@ -93,7 +93,7 @@ class Spider:
                 id='redirect'
             ).attrs['action']
         )
-        datas=dict(xnxq='2019-2020-2-2')
+        datas=dict(xnxq='2020-2021-1-2')
         self._gotoUrl('https://dean.bjtu.edu.cn/course_selection/courseselect/stuschedule/',data=datas)
         analyser=bs4.BeautifulSoup(self.page.text,'html.parser')
         class_={i:{j:"" for j in range(1,8)} for i in  range(1,8) }
