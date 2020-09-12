@@ -256,10 +256,13 @@ class Spider:
 
         email = []
         for i in range(len(email_ids)):
+          try:
             if (email_senders[i].find(self.loginname) != -1):
                 email_isread.insert(i, 'None')
             email.append((email_ids[i], email_senders[i].replace('\\', ''), email_subjects[i], email_Date[i],
                           email_isread[i].replace('}', '')))
+          except:
+              pass
         email.sort(key=lambda x: x[3], reverse=True)
 
         # 第一个参数获取邮件内容
