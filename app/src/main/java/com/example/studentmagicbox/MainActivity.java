@@ -104,10 +104,10 @@ public class MainActivity extends AppCompatActivity {
                     super.handleMessage(msg);
                     PyObject o=Python.getInstance().getModule("hello").callAttr("getMail_and_Information",loginname,password);
                     EmailBean data= o.toJava(EmailBean.class);
+                    for (EmailBean.EmailItem x:data.EmailList)
+                        System.out.println(x);
+                    System.out.println(data.ecard_year);
                     System.out.println("邮件载入成功！");
-//                    for (EmailBean.EmailItem x:data.EmailList)
-//                        System.out.println(x);
-//                    System.out.println(data.ecard_year);
                 }
             };
             Looper.loop();
@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                         System.out.println("第"+i+"节："+data.RoomList[i].size());
                     }
                     System.out.println(data.timeinfo);
-                    System.out.println("课表载入成功！");
+                    System.out.println("教室资源载入成功！");
                 }
             };
             Looper.loop();
@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
                     for(int i=0;i<=6;++i)
                         for(int j=0;j<=6;++j)
                             System.out.println(i+" "+j+data.schedule[i][j]);
-                        System.out.println("教师资源载入成功");
+                        System.out.println("课表载入成功");
                 }
             };
             Looper.loop();
