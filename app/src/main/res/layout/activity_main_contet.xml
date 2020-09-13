@@ -16,7 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/content_title"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
 
         <TextView
             android:id="@+id/master"
@@ -46,11 +47,11 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="69dp"
-                    android:src="@drawable/grd" />
+                    android:src="@drawable/lidrg" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="成绩查询"
+                    android:text="我的成绩"
                     android:textSize="20sp"
                     android:gravity="center"
                     android:textColor="#704C4C"/>
@@ -63,11 +64,11 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="69dp"
-                    android:src="@drawable/grd" />
+                    android:src="@drawable/licls" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="课表查询"
+                    android:text="我的课表"
                     android:textSize="20sp"
                     android:gravity="center"
                     android:textColor="#704C4C"/>
@@ -80,11 +81,11 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="69dp"
-                    android:src="@drawable/grd" />
+                    android:src="@drawable/liroom" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="自习室查询"
+                    android:text="空闲教室"
                     android:textSize="20sp"
                     android:gravity="center"
                     android:textColor="#704C4C"/>
@@ -102,7 +103,7 @@
             <ImageView
                 android:layout_width="104dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/gail" />
+                android:src="@drawable/limail" />
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -117,6 +118,12 @@
                     android:text="未读邮件"
                     android:textSize="20sp"
                     android:layout_marginTop="10dip"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginBottom="5dip"
+                    android:layout_marginTop="5dip"
+                    android:background="#eeeeee" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -141,19 +148,34 @@
                 android:layout_height="wrap_content"
                 android:text="一卡通余额"
                 android:textSize="20sp"
+                android:textColor="#704C4C"
                 android:gravity="center"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginBottom="5dip"
+                android:layout_marginTop="5dip"
+                android:background="#eeeeee" />
             <TextView
                 android:id="@+id/ipjj"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="ip地址还有过期"
+                android:textColor="#704C4C"
                 android:textSize="20sp"
                 android:gravity="center"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginBottom="5dip"
+                android:layout_marginTop="5dip"
+                android:background="#eeeeee" />
             <TextView
                 android:id="@+id/netyue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="网费余额还剩"
+                android:textColor="#704C4C"
                 android:textSize="20sp"
                 android:gravity="center"/>
 

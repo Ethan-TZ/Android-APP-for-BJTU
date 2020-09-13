@@ -280,10 +280,11 @@ class Spider:
         except:
             pass
 
+net=None
+s=None
 
 def getgrade(loginname,password):
     GradeBean=jclass("com.example.studentmagicbox.Beans.GradeBean")
-    net=Spider(loginname,password)
     result=net._Calc_GPA_AVG()
     jb=GradeBean(result[0],result[1])
     for x in net.getGrade():
@@ -293,8 +294,6 @@ def getgrade(loginname,password):
 
 def getMail_and_Information(loginname,password):
     EmailBean=jclass("com.example.studentmagicbox.Beans.EmailBean")
-    net=Spider(loginname,password)
-    s=re.findall(re.compile(r'(?<=<a href="#">).+?(?=，)'),net.page.text)
     jb=EmailBean()
     for x in net.getEmail():
         jb.add(x[0],x[1],x[2],x[3])
@@ -304,7 +303,6 @@ def getMail_and_Information(loginname,password):
 
 def getClassRoom(loginname,password):
     ClassroomBean=jclass("com.example.studentmagicbox.Beans.ClassroomBean")
-    net=Spider(loginname,password)
     jb=ClassroomBean()
     datas=net.getClassRoom()
     jb.setTimeinfo(str(net.dateinfo))
@@ -315,7 +313,6 @@ def getClassRoom(loginname,password):
 
 def getSchedule(loginname,password):
     ScheduleBean=jclass("com.example.studentmagicbox.Beans.ScheduleBean")
-    net=Spider(loginname,password)
     jb=ScheduleBean()
     datas=net.getTheClass()
     for i in datas.keys():
@@ -324,5 +321,14 @@ def getSchedule(loginname,password):
     return jb
 
 def checkUser(loginname,password):
+    global net,s
+    Spider.session=requests.session()
+    Spider.session.cookies=CookieJar()
+    Spider.headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Safari/537.36'
+        ,'Referer':"https://cas.bjtu.edu.cn/auth/login/"
+    }
     net=Spider(loginname,password)
-    return net.page.url != "https://cas.bjtu.edu.cn/auth/login/"
+    print(net.page.url)
+    s=re.findall(re.compile(r'(?<=<span>).+?(?=</span>)'),net.page.text)
+    return net.page.url.find("https://cas.bjtu.edu.cn/auth/login/")==-1

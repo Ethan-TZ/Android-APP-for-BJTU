@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
     private String password;
     EditText userlogin;
     EditText userpassword;
-    Button check;
 
     private TextView mBtnLogin;
     private View progress;
@@ -166,20 +165,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initPython();
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         InitView();
+        initPython();
         new LoadingThread().start();
         new EmailThread().start();
         new ClassRoomThread().start();
         new ScheduleThread().start();
         mBtnLogin.setOnClickListener(evt->
         {
-
-
             loginname=userlogin.getText().toString();
             password=userpassword.getText().toString();
+
+            System.out.println(loginname+password);
 
             PyObject o=Python.getInstance().getModule("hello").callAttr("checkUser",loginname,password);
             Boolean success=o.toJava(Boolean.class);
@@ -188,7 +187,6 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this,"用户名或密码错误",Toast.LENGTH_LONG).show();
                 return;
             }
-
 
             // 计算出控件的高与宽
             mWidth = mBtnLogin.getMeasuredWidth();
@@ -200,12 +198,10 @@ public class MainActivity extends AppCompatActivity {
             inputAnimator(mInputLayout, mWidth, mHeight);
 
 
-
-
             patchHandler.sendEmptyMessageDelayed(1,0);
-            classHandler.sendEmptyMessageDelayed(1,3000);
-            scheduleHander.sendEmptyMessageDelayed(1,6000);
-            emailHandler.sendEmptyMessageDelayed(1,9000);
+            classHandler.sendEmptyMessageDelayed(1,2000);
+            scheduleHander.sendEmptyMessageDelayed(1,4000);
+            emailHandler.sendEmptyMessageDelayed(1,6000);
         });
     }
 

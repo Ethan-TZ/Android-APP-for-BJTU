@@ -8,27 +8,25 @@
     tools:context=".MainActivity"
     >
 
-    <include
-        android:id="@+id/main_title"
-        layout="@layout/title_layout"/>
+
     
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/main_title"
+        android:layout_marginTop="40dip"
         android:orientation="vertical">
         <ImageView
             android:layout_width="55dip"
             android:layout_height="55dip"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/bjtu"/>
+            android:src="@drawable/icon"/>
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dip"
             android:gravity="center"
             android:text="BJTU"
-            android:textColor="#ffffff"
+            android:textColor="@color/colorPrimary"
             android:textSize="24sp"/>
         
         <TextView
@@ -36,7 +34,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="SHOW YOURSELF"
-            android:textColor="#ffffff"
+            android:textColor="@color/colorPrimary"
             android:textSize="16sp"/>
     </LinearLayout>
 
