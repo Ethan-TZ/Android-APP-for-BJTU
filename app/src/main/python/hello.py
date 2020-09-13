@@ -321,3 +321,7 @@ def getSchedule(loginname,password):
         for j in datas[i].keys():
             jb.set(j,i,datas[i][j])
     return jb
+
+def checkUser(loginname,password):
+    net=Spider(loginname,password)
+    return net.page.url != "https://cas.bjtu.edu.cn/auth/login/"

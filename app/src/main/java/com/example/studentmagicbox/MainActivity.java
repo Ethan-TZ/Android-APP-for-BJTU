@@ -176,6 +176,20 @@ public class MainActivity extends AppCompatActivity {
         new ScheduleThread().start();
         mBtnLogin.setOnClickListener(evt->
         {
+
+
+            loginname=userlogin.getText().toString();
+            password=userpassword.getText().toString();
+
+            PyObject o=Python.getInstance().getModule("hello").callAttr("checkUser",loginname,password);
+            Boolean success=o.toJava(Boolean.class);
+            if(!success)
+            {
+                Toast.makeText(MainActivity.this,"用户名或密码错误",Toast.LENGTH_LONG).show();
+                return;
+            }
+
+
             // 计算出控件的高与宽
             mWidth = mBtnLogin.getMeasuredWidth();
             mHeight = mBtnLogin.getMeasuredHeight();
@@ -186,8 +200,6 @@ public class MainActivity extends AppCompatActivity {
             inputAnimator(mInputLayout, mWidth, mHeight);
 
 
-            loginname=userlogin.getText().toString();
-            password=userpassword.getText().toString();
 
 
             patchHandler.sendEmptyMessageDelayed(1,0);
