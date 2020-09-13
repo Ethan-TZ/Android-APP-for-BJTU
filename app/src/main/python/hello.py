@@ -329,6 +329,5 @@ def checkUser(loginname,password):
         ,'Referer':"https://cas.bjtu.edu.cn/auth/login/"
     }
     net=Spider(loginname,password)
-    print(net.page.url)
     s=re.findall(re.compile(r'(?<=<span>).+?(?=</span>)'),net.page.text)
     return net.page.url.find("https://cas.bjtu.edu.cn/auth/login/")==-1
