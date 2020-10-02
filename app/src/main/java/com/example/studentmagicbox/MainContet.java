@@ -10,7 +10,7 @@ import android.widget.TextView;
 public class MainContet extends AppCompatActivity {
 
     private TextView name,unreadEmail,ecard,ipjj,netfee;
-    private ImageView backto;
+    private ImageView backto, classroom,timetable,inemail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,13 +21,32 @@ public class MainContet extends AppCompatActivity {
         ipjj=findViewById(R.id.ipjj);
         netfee=findViewById(R.id.netyue);
         backto=findViewById(R.id.backto);
+        classroom=findViewById(R.id.classroom_page);
+        timetable=findViewById(R.id.timetable_page);
+        inemail=findViewById(R.id.inmail);
+
         name.setText("欢迎您 "+MainActivity.emailBean.username);
         unreadEmail.setText("你有"+MainActivity.emailBean.new_email+"封未读邮件");
         ecard.setText("你的一卡通余额还剩"+MainActivity.emailBean.ecard_year+"元");
         ipjj.setText("你有"+MainActivity.emailBean.jjgp_ip+"个ip地址即将过期");
         netfee.setText("你的网费余额还剩"+MainActivity.emailBean.net_fee+"元");
+
         backto.setOnClickListener(e->{
             startActivity(new Intent(MainContet.this,MainActivity.class));
+            finish();
+
+        });
+        classroom.setOnClickListener(e->{
+            startActivity(new Intent(MainContet.this,ClassroomActivity.class));
+            finish();
+
+        });
+        timetable.setOnClickListener(e->{
+            startActivity(new Intent(MainContet.this,TimeTableActivity.class));
+            finish();
+        });
+        inemail.setOnClickListener(e->{
+            startActivity(new Intent(MainContet.this,EmailUI.class));
             finish();
         });
     }

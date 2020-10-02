@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.studentmagicbox">
 
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -10,9 +11,14 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        >
-        <activity android:name=".MainContet"></activity>
+        android:theme="@style/AppTheme">
+        <activity android:name=".EmailShow"></activity>
+        <meta-data android:name="android.webkit.WebView.EnableSafeBrowsing"
+            android:value="true"/>
+        <activity android:name=".EmailUI" />
+        <activity android:name=".MainContet" />
+        <activity android:name=".ClassroomActivity" />
+        <activity android:name=".TimeTableActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#206d95e5">
+        <LinearLayout
+            android:id="@+id/input_layout_name"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/paw_code"
+                android:layout_gravity="center"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_weight="1"
+                    android:id="@+id/title"
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="10dip"
+                    android:background="#00000000"
+                    android:text=""
+                    android:textColor="#EFE980"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/subject"
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="10dip"
+                    android:background="#00000000"
+                    android:textColor="#EFE980"
+                    android:text=""
+                     />
+                </LinearLayout>
+        </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginBottom="5dip"
+        android:layout_marginTop="5dip"
+        android:background="#eeeeee" />
+</LinearLayout>

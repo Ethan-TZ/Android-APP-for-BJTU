@@ -31,8 +31,8 @@ import com.chaquo.python.android.AndroidPlatform;
 
 public class MainActivity extends AppCompatActivity {
     private final int LOADING=1;
-    private String loginname;
-    private String password;
+    private static String loginname;
+    private static String password;
     EditText userlogin;
     EditText userpassword;
 
@@ -225,6 +225,11 @@ public class MainActivity extends AppCompatActivity {
         animator2.start();
     }
 
+    public static String extract(String mid)
+    {
+        PyObject o = Python.getInstance().getModule("hello").callAttr("extract", mid);
+        return o.toJava(String.class);
+    }
 
 
 

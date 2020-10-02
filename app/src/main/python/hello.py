@@ -2,8 +2,7 @@ from http.cookiejar import CookieJar
 import bs4
 import requests
 from java import jclass
-import selenium
-from selenium import webdriver
+
 import re
 import time, datetime
 
@@ -50,14 +49,14 @@ class Spider:
                 id='redirect'
             ).attrs['action']
         )
-        self._gotoUrl('https://dean.bjtu.edu.cn/score/scores/stu/view/')
+        self._gotoUrl('https://aa.bjtu.edu.cn/score/scores/stu/view/')
 
         self.grade = self.grade.union(set(self.get_page_grade(
             self.page
         )))
 
         datas = dict(page='1', perpage='500', ctype='ln')
-        self._gotoUrl('https://dean.bjtu.edu.cn/score/scores/stu/view/', data=datas)
+        self._gotoUrl('https://aa.bjtu.edu.cn/score/scores/stu/view/', data=datas)
         self.grade = self.grade.union(set(self.get_page_grade(self.page)))
         return self.grade
 
@@ -94,7 +93,7 @@ class Spider:
             ).attrs['action']
         )
         datas=dict(xnxq='2020-2021-1-2')
-        self._gotoUrl('https://dean.bjtu.edu.cn/course_selection/courseselect/stuschedule/',data=datas)
+        self._gotoUrl('https://aa.bjtu.edu.cn/course_selection/courseselect/stuschedule/',data=datas)
         analyser=bs4.BeautifulSoup(self.page.text,'html.parser')
         class_={i:{j:"" for j in range(1,8)} for i in  range(1,8) }
         for i,lines in enumerate(analyser.find_all('tr')):
@@ -199,7 +198,7 @@ class Spider:
         information = {"第" + str(i) + "节": [] for i in range(1, 8)}
         # zc:教学周
         data = dict(page='1', zc=str(self.dateinfo[1]) , perpage='500')
-        self._gotoUrl('https://dean.bjtu.edu.cn/classroom/timeholdresult/room_stat', data=data)
+        self._gotoUrl('https://aa.bjtu.edu.cn/classroom/timeholdresult/room_stat', data=data)
         analyer = bs4.BeautifulSoup(self.page.text, 'html.parser')
         for line in analyer.find_all('tr'):
             if len(line.find_all('td')) == 50:
@@ -273,15 +272,24 @@ class Spider:
         self._gotoUrl('https://mail.bjtu.edu.cn/coremail/XT5/jsp/viewMailHTML.jsp', data={
             'mid': mid
         })
+
         try:
-            return eval(repr(bs4.BeautifulSoup(
-                re.findall(re.compile(r'(?<=var mainPartContent = \(\').+?(?=\'\))'),
-                           self.page.text)[0], 'lxml').get_text()).replace('\\\\', '\\'))
+            return re.findall(re.compile(r'(?<=var mainPartContent = \(\').+?(?=\'\))'),
+                                                  self.page.text)[0].replace('\\n', '').replace('\\t','')
         except:
-            pass
+            return "无内容"
+        # try:
+        #     return eval(repr(bs4.BeautifulSoup(
+        #         re.findall(re.compile(r'(?<=var mainPartContent = \(\').+?(?=\'\))'),
+        #                    self.page.text)[0], 'lxml').get_text()).replace('\\\\', '\\'))
+        # except:
+        #     pass
 
 net=None
 s=None
+
+def extract(mid):
+    return net._extract_from_mid(mid)
 
 def getgrade(loginname,password):
     GradeBean=jclass("com.example.studentmagicbox.Beans.GradeBean")

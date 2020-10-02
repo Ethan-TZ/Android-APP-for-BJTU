@@ -29,7 +29,7 @@ public class EmailBean {
     }
 
     public class EmailItem {
-        private String mid;
+        public String mid;
         public String sender_name;
         public String subject;
         public String is_read;

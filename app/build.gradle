@@ -22,7 +22,7 @@ android {
             pip {
                 install "bs4"
                 install "requests"
-                install "selenium"
+                install "lxml"
             }
         }
     }
