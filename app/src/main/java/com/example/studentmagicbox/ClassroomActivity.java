@@ -27,7 +27,7 @@ public class ClassroomActivity extends AppCompatActivity implements View.OnClick
     private int current_classes;
     private String class_key;
     private int time_key;
-
+    private static  int alpha = 40;
 
     private void initview()
     {
@@ -41,14 +41,14 @@ public class ClassroomActivity extends AppCompatActivity implements View.OnClick
         yfb = findViewById(R.id.classroom_yf);
         jxb = findViewById(R.id.classroom_jx);
         d1b = findViewById(R.id.classroom_d1);
-        syb.getBackground().setAlpha(0);
-        syxb.getBackground().setAlpha(0);
-        sydb.getBackground().setAlpha(0);
-        jiujb.getBackground().setAlpha(0);
-        bajb.getBackground().setAlpha(0);
-        yfb.getBackground().setAlpha(0);
-        jxb.getBackground().setAlpha(0);
-        d1b.getBackground().setAlpha(0);
+        syb.getBackground().setAlpha(alpha);
+        syxb.getBackground().setAlpha(alpha);
+        sydb.getBackground().setAlpha(alpha);
+        jiujb.getBackground().setAlpha(alpha);
+        bajb.getBackground().setAlpha(alpha);
+        yfb.getBackground().setAlpha(alpha);
+        jxb.getBackground().setAlpha(alpha);
+        d1b.getBackground().setAlpha(alpha);
 
         c1 = findViewById(R.id.time_c1);
         c2 = findViewById(R.id.time_c2);
@@ -57,13 +57,13 @@ public class ClassroomActivity extends AppCompatActivity implements View.OnClick
         c5 = findViewById(R.id.time_c5);
         c6 = findViewById(R.id.time_c6);
         c7 = findViewById(R.id.time_c7);
-        c1.getBackground().setAlpha(0);
-        c2.getBackground().setAlpha(0);
-        c3.getBackground().setAlpha(0);
-        c4.getBackground().setAlpha(0);
-        c5.getBackground().setAlpha(0);
-        c6.getBackground().setAlpha(0);
-        c7.getBackground().setAlpha(0);
+        c1.getBackground().setAlpha(alpha);
+        c2.getBackground().setAlpha(alpha);
+        c3.getBackground().setAlpha(alpha);
+        c4.getBackground().setAlpha(alpha);
+        c5.getBackground().setAlpha(alpha);
+        c6.getBackground().setAlpha(alpha);
+        c7.getBackground().setAlpha(alpha);
 
 
         syb.setOnClickListener(this);
@@ -111,15 +111,15 @@ public class ClassroomActivity extends AppCompatActivity implements View.OnClick
         if(class_stays == null){
             class_stays = btn;
             System.out.println("null");
-            btn.getBackground().setAlpha((100));
+            btn.getBackground().setAlpha((120));
         }
         else if(btn == class_stays){
             class_stays = null;
-            btn.getBackground().setAlpha(0);
+            btn.getBackground().setAlpha(alpha);
         }
         else {
-            class_stays.getBackground().setAlpha(0);
-            btn.getBackground().setAlpha(100);
+            class_stays.getBackground().setAlpha(alpha);
+            btn.getBackground().setAlpha(120);
             class_stays = btn;
         }
     }
@@ -128,15 +128,15 @@ public class ClassroomActivity extends AppCompatActivity implements View.OnClick
     {
         if(time_stays == null){
             time_stays = btn;
-            btn.getBackground().setAlpha((100));
+            btn.getBackground().setAlpha((120));
         }
         else if(btn == time_stays){
             time_stays = null;
-            btn.getBackground().setAlpha(0);
+            btn.getBackground().setAlpha(alpha);
         }
         else {
-            time_stays.getBackground().setAlpha(0);
-            btn.getBackground().setAlpha(100);
+            time_stays.getBackground().setAlpha(alpha);
+            btn.getBackground().setAlpha(120);
             time_stays = btn;
         }
     }

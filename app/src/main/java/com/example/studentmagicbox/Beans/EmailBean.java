@@ -11,6 +11,7 @@ public class EmailBean {
 //        ecard_year:一卡通余额
     public String jjgp_ip,
             ip_count,net_fee,ecard_year,new_email,username;
+    public int jiaoxuezhou;
 
     public void add(String mid, String sender_name, String subject, String is_read)
     {
@@ -18,7 +19,7 @@ public class EmailBean {
     }
 
 
-    public void set(String jjgp_ip,String ip_count,String net_fee,String ecard_year,String new_email,String username)
+    public void set(String jjgp_ip,String ip_count,String net_fee,String ecard_year,String new_email,String username,int jiaoxuezhou)
     {
         this.jjgp_ip=jjgp_ip;
         this.ip_count=ip_count;
@@ -26,6 +27,7 @@ public class EmailBean {
         this.ecard_year=ecard_year;
         this.new_email=new_email;
         this.username=username;
+        this.jiaoxuezhou=jiaoxuezhou;
     }
 
     public class EmailItem {

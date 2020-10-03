@@ -11,6 +11,7 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -27,6 +28,12 @@ import android.widget.Toast;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -138,7 +145,18 @@ public class MainActivity extends AppCompatActivity {
         animator3.start();
 
     }
-
+    public static String getDefaultFilePath() {
+        String filepath = "";
+        File file = new File(Environment.getExternalStorageDirectory(),
+                "userinfo.txt");
+        if (file.exists()) {
+            filepath = file.getAbsolutePath();
+        } else {
+            filepath = "不适用";
+        }
+        return filepath;
+    }
+    
 
     private int  SuccessCount=0;
 
@@ -169,16 +187,48 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         InitView();
         initPython();
+        String strsBuffer ="";
+        try {
+            // 判断是否存在SD
+            if (Environment.getExternalStorageState().equals(
+                    Environment.MEDIA_MOUNTED)) {
+                File file = new File(Environment.getExternalStorageDirectory()
+                        .getCanonicalPath() + "/userinfo.txt");
+                // 判断是否存在该文件
+                if (file.exists()) {
+                    // 打开文件输入流
+                    FileInputStream fileR = new FileInputStream(file);
+                    BufferedReader reads = new BufferedReader(
+                            new InputStreamReader(fileR));
+                    String st = null;
+                    while ((st = reads.readLine()) != null) {
+                        strsBuffer+=st;
+                    }
+                    fileR.close();
+                    String[]s=strsBuffer.split(" ");
+                   userlogin.setText(s[0]);
+                   userpassword.setText(s[1]);
+                    password=s[1];
+                } else {
+                    Toast.makeText(this, "该目录下文件不存在", Toast.LENGTH_LONG).show();
+                }
+            }
+        } catch (Exception e) {
+        }
+
+
+
         new LoadingThread().start();
         new EmailThread().start();
         new ClassRoomThread().start();
         new ScheduleThread().start();
+        new FileThread().start();
         mBtnLogin.setOnClickListener(evt->
         {
             loginname=userlogin.getText().toString();
             password=userpassword.getText().toString();
 
-            System.out.println(loginname+password);
+
 
             PyObject o=Python.getInstance().getModule("hello").callAttr("checkUser",loginname,password);
             Boolean success=o.toJava(Boolean.class);
@@ -197,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
 
             inputAnimator(mInputLayout, mWidth, mHeight);
 
-
+            FileIOHandler.sendEmptyMessageDelayed(1,0);
             patchHandler.sendEmptyMessageDelayed(1,0);
             classHandler.sendEmptyMessageDelayed(1,2000);
             scheduleHander.sendEmptyMessageDelayed(1,4000);
@@ -234,7 +284,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private Handler patchHandler,emailHandler,classHandler,scheduleHander;
+    private Handler patchHandler,emailHandler,classHandler,scheduleHander,FileIOHandler;
 
     public static ClassroomBean classroomBean;
     public static EmailBean emailBean;
@@ -256,6 +306,36 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, Float.toString(gradeBean.GPA), Toast.LENGTH_LONG).show();
                     System.out.println("成绩载入成功");
                     SkipTo();
+                }
+            };
+            Looper.loop();
+        }
+    }
+
+    class FileThread extends Thread{
+        @SuppressLint("HandlerLeak")
+        @Override
+        public void run() {
+            super.run();
+            Looper.prepare();
+            FileIOHandler = new Handler() {
+                @Override
+                public void handleMessage(@NonNull Message msg) {
+                    super.handleMessage(msg);
+                    try {
+                        // 判断是否存在SD卡
+                        if (Environment.getExternalStorageState().equals(
+                                Environment.MEDIA_MOUNTED)) {
+                            // 获取SD卡的目录
+                            File sdDire = Environment.getExternalStorageDirectory();
+                            FileOutputStream outFileStream = new FileOutputStream(
+                                    sdDire.getCanonicalPath() + "/userinfo.txt");
+                            outFileStream.write((loginname+" "+password).getBytes());
+                            outFileStream.close();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             };
             Looper.loop();

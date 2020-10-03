@@ -306,7 +306,7 @@ def getMail_and_Information(loginname,password):
     for x in net.getEmail():
         jb.add(x[0],x[1],x[2],x[3])
     y=net.Others()
-    jb.set(y[0],y[1],y[2],y[3],y[4],s[0])
+    jb.set(y[0],y[1],y[2],y[3],y[4],s[0],net.dateinfo[1])
     return jb
 
 def getClassRoom(loginname,password):
