@@ -3,7 +3,10 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="white">#FFFFFF</color> <!--白色 -->
     <color name="table_top">#66FFD700</color>
     <color name="table_left">#667FFF00</color>
     <color name="table_text">#FFFFFF</color>
+    <color name="TiffanyBlue">#9866CCCC</color>
+    <color name="TiYiBlue">#66CCFF</color>
 </resources>

@@ -2,7 +2,9 @@ package com.example.studentmagicbox;
 import com.example.studentmagicbox.Beans.*;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
@@ -10,6 +12,7 @@ import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -238,6 +241,8 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
+            inputAnimator(mInputLayout, mWidth, mHeight);
+
             // 计算出控件的高与宽
             mWidth = mBtnLogin.getMeasuredWidth();
             mHeight = mBtnLogin.getMeasuredHeight();
@@ -245,7 +250,6 @@ public class MainActivity extends AppCompatActivity {
             mName.setVisibility(View.INVISIBLE);
             mPsw.setVisibility(View.INVISIBLE);
 
-            inputAnimator(mInputLayout, mWidth, mHeight);
 
             FileIOHandler.sendEmptyMessageDelayed(1,0);
             patchHandler.sendEmptyMessageDelayed(1,0);
@@ -254,6 +258,7 @@ public class MainActivity extends AppCompatActivity {
             emailHandler.sendEmptyMessageDelayed(1,6000);
         });
     }
+
 
 
     private void recovery()

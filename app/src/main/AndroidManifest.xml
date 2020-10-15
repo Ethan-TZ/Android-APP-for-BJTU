@@ -5,10 +5,7 @@
 
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- SDCard中创建与删除文件权限 -->
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
-        tools:ignore="ProtectedPermissions" />
-    <!-- 向SDCard写入数据权限 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
@@ -25,6 +22,8 @@
         <activity android:name=".MainContet" />
         <activity android:name=".ClassroomActivity" />
         <activity android:name=".TimeTableActivity" />
+        <activity android:name=".GradeActivity"/>
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

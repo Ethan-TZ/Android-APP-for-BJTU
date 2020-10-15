@@ -85,13 +85,45 @@ public class ClassroomActivity extends AppCompatActivity implements View.OnClick
         class_stays = null;
         time_stays = null;
     }
+    private void set_currentClasses()
+    {
+        calendar = Calendar.getInstance();
+        hour = calendar.get(Calendar.HOUR_OF_DAY);
+        if(hour == 8 || hour == 9){
+            current_classes = 0;
+        }
+        else if(hour == 10 || hour == 11){
+            current_classes = 1;
+        }
+        else if(hour == 12 || hour == 13){
+            current_classes = 2;
+        }
+        else if(hour == 14 || hour == 15){
+            current_classes = 3;
+        }
+        else if(hour == 16 || hour == 17){
+            current_classes = 4;
+        }
+        else if(hour == 18){
+            current_classes = 100;
+        }
+        else if(hour == 19|| hour ==20){
+            current_classes = 5;
+        }
+        else if(hour == 21){
+            current_classes = 6;
+        }
+        else {
+            current_classes = 100;
+        }
+        time_key = current_classes;
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        calendar = Calendar.getInstance();
-        hour = calendar.get(Calendar.HOUR_OF_DAY);
-        current_classes = (hour - 8)/2;
-        time_key = current_classes;
+
+        set_currentClasses();
         class_key = "";
 
         super.onCreate(savedInstanceState);
@@ -168,62 +200,64 @@ public class ClassroomActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void add_classroom() {
-        List<String> roomList = new ArrayList<>(MainActivity.classroomBean.RoomList[time_key]);
-        List<String> output = new ArrayList<>();
-        if(class_key != "") {
-            if(class_key != "9")
-            for (int i = 0; i < roomList.size(); i++) {
-                if (roomList.get(i).indexOf(class_key) == 0) {
-                    for (; i < roomList.size() && roomList.get(i).indexOf(class_key) == 0; i++)
-                        output.add(roomList.get(i));
-                    break;
-                }
-            }
-            else
-                for (int i = 0; i < roomList.size(); i++) {
-                    if ((roomList.get(i).indexOf("东") == 0|| roomList.get(i).indexOf("中") == 0) && roomList.get(i).indexOf("东区") == -1){
-                        for (; i < roomList.size() && ((roomList.get(i).indexOf("东") == 0|| roomList.get(i).indexOf("中") == 0) && roomList.get(i).indexOf("东区") == -1); i++)
-                            output.add(roomList.get(i));
-                        break;
+        if (time_key != 100) {
+            List<String> roomList = new ArrayList<>(MainActivity.classroomBean.RoomList[time_key]);
+            List<String> output = new ArrayList<>();
+            if (!class_key.equals("")) {
+                if (!class_key.equals("9"))
+                    for (int i = 0; i < roomList.size(); i++) {
+                        if (roomList.get(i).indexOf(class_key) == 0) {
+                            for (; i < roomList.size() && roomList.get(i).indexOf(class_key) == 0; i++)
+                                output.add(roomList.get(i));
+                            break;
+                        }
                     }
+                else
+                    for (int i = 0; i < roomList.size(); i++) {
+                        if ((roomList.get(i).indexOf("东") == 0 || roomList.get(i).indexOf("中") == 0) && roomList.get(i).indexOf("东区") == -1) {
+                            for (; i < roomList.size() && ((roomList.get(i).indexOf("东") == 0 || roomList.get(i).indexOf("中") == 0) && roomList.get(i).indexOf("东区") == -1); i++)
+                                output.add(roomList.get(i));
+                            break;
+                        }
+                    }
+            }
+
+
+            LinearLayout left_Content = findViewById(R.id.classroom_list_left);
+            LinearLayout right_Content = findViewById(R.id.classroom_list_right);
+            if (class_key != "")
+                for (int i = 0; i < output.size(); i++) {
+                    TextView textView = new TextView(this);
+                    textView.setText(output.get(i));
+                    textView.setTextSize(17);
+                    textView.setTextColor(Color.WHITE);
+                    textView.setGravity(Gravity.LEFT);
+                    left_Content.addView(textView);
+
+                    TextView textView_r = new TextView(this);
+                    textView_r.setText(" 空闲");
+                    textView_r.setTextSize(17);
+                    textView_r.setTextColor(Color.WHITE);
+                    textView_r.setGravity(Gravity.RIGHT);
+                    right_Content.addView(textView_r);
+                }
+            else
+                for (int i = 0; i < MainActivity.classroomBean.RoomList[time_key].size(); i++) {
+                    TextView textView = new TextView(this);
+                    textView.setText(MainActivity.classroomBean.RoomList[time_key].get(i));
+                    textView.setTextSize(17);
+                    textView.setTextColor(Color.WHITE);
+                    textView.setGravity(Gravity.LEFT);
+                    left_Content.addView(textView);
+
+                    TextView textView_r = new TextView(this);
+                    textView_r.setText(" 空闲");
+                    textView_r.setTextSize(17);
+                    textView_r.setTextColor(Color.WHITE);
+                    textView_r.setGravity(Gravity.RIGHT);
+                    right_Content.addView(textView_r);
                 }
         }
-
-
-        LinearLayout left_Content = findViewById(R.id.classroom_list_left);
-        LinearLayout right_Content = findViewById(R.id.classroom_list_right);
-        if(class_key != "")
-        for (int i=0; i < output.size(); i++) {
-            TextView textView = new TextView(this);
-            textView.setText(output.get(i));
-            textView.setTextSize(17);
-            textView.setTextColor(Color.WHITE);
-            textView.setGravity(Gravity.LEFT);
-            left_Content.addView(textView);
-
-            TextView textView_r = new TextView(this);
-            textView_r.setText(" 空闲");
-            textView_r.setTextSize(17);
-            textView_r.setTextColor(Color.WHITE);
-            textView_r.setGravity(Gravity.RIGHT);
-            right_Content.addView(textView_r);
-        }
-        else
-            for (int i=0; i<MainActivity.classroomBean.RoomList[time_key].size(); i++) {
-                TextView textView = new TextView(this);
-                textView.setText(MainActivity.classroomBean.RoomList[time_key].get(i));
-                textView.setTextSize(17);
-                textView.setTextColor(Color.WHITE);
-                textView.setGravity(Gravity.LEFT);
-                left_Content.addView(textView);
-
-                TextView textView_r = new TextView(this);
-                textView_r.setText(" 空闲");
-                textView_r.setTextSize(17);
-                textView_r.setTextColor(Color.WHITE);
-                textView_r.setGravity(Gravity.RIGHT);
-                right_Content.addView(textView_r);
-            }
     }
 
 

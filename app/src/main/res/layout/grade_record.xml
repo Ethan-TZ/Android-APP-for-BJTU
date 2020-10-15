@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="2dp"
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            android:id="@+id/tv_lessonid"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="id"
+            android:textSize="17dp"
+            />
+
+        <TextView
+            android:id="@+id/tv_lesson"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="课程"
+            android:textSize="17dp"
+            />
+
+        <TextView
+            android:id="@+id/tv_lessonyear"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="year"
+            android:textSize="17dp"
+            tools:layout_editor_absoluteY="0dp" />
+
+        <TextView
+            android:id="@+id/tv_lessonteacher"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="老师"
+            android:gravity="center"
+            android:textSize="17dp"
+            tools:layout_editor_absoluteY="0dp" />
+
+        <TextView
+            android:id="@+id/tv_lessonweight"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:text="3"
+            android:textSize="17dp"
+            tools:layout_editor_absoluteY="0dp" />
+
+        <TextView
+            android:id="@+id/tv_grade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:gravity="center"
+            android:text="成绩"
+            android:textSize="17dp" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -198,7 +198,7 @@ class Spider:
         information = {"第" + str(i) + "节": [] for i in range(1, 8)}
         # zc:教学周
         data = dict(page='1', zc=str(self.dateinfo[1]) , perpage='500')
-        self._gotoUrl('https://aa.bjtu.edu.cn/classroom/timeholdresult/room_stat', data=data)
+        self._gotoUrl('https://aa.bjtu.edu.cn/classroom/timeholdresult/room_view', data=data)
         analyer = bs4.BeautifulSoup(self.page.text, 'html.parser')
         for line in analyer.find_all('tr'):
             if len(line.find_all('td')) == 50:

@@ -19,8 +19,6 @@ public class GradeBean {
     }
 
 
-
-
     public class GradeItem {
         public String lesson_year;
         public String lesson_id;
@@ -38,7 +36,12 @@ public class GradeBean {
             this.lesson_teacher = lesson_teacher;
         }
 
-
+        public String getLesson_year(){return lesson_year;}
+        public String getLesson_id(){return lesson_id;}
+        public String getLesson_name(){return lesson_name;}
+        public String getLesson_weight(){return lesson_weight;}
+        public String getLesson_grade(){return lesson_grade;}
+        public String getLesson_teacher(){return lesson_teacher;}
 
         @Override
         public String toString() {

@@ -10,7 +10,7 @@ import android.widget.TextView;
 public class MainContet extends AppCompatActivity {
 
     private TextView name,unreadEmail,ecard,ipjj,netfee;
-    private ImageView backto, classroom,timetable,inemail;
+    private ImageView backto, classroom,timetable,inemail,grade;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +24,7 @@ public class MainContet extends AppCompatActivity {
         classroom=findViewById(R.id.classroom_page);
         timetable=findViewById(R.id.timetable_page);
         inemail=findViewById(R.id.inmail);
+        grade=findViewById(R.id.grade_page);
 
         name.setText("欢迎您 "+MainActivity.emailBean.username);
         unreadEmail.setText("你有"+MainActivity.emailBean.new_email+"封未读邮件");
@@ -47,6 +48,11 @@ public class MainContet extends AppCompatActivity {
         });
         inemail.setOnClickListener(e->{
             startActivity(new Intent(MainContet.this,EmailUI.class));
+            finish();
+        });
+
+        grade.setOnClickListener(e->{
+            startActivity(new Intent(MainContet.this,GradeActivity.class));
             finish();
         });
     }
