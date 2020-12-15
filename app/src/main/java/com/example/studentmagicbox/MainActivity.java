@@ -58,9 +58,8 @@ public class MainActivity extends AppCompatActivity {
         mPsw=findViewById(R.id.input_layout_psw);
         userlogin=findViewById(R.id.loginname);
         userpassword=findViewById(R.id.password);
+        System.out.println("虚拟化与云计算");
     }
-
-
 
     /**
      * 输入框的动画效果
