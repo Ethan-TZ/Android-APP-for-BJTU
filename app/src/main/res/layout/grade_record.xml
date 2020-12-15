@@ -14,13 +14,7 @@
         tools:layout_editor_absoluteY="2dp"
         tools:ignore="MissingConstraints">
 
-        <TextView
-            android:id="@+id/tv_lessonid"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:text="id"
-            android:textSize="17dp"
-            />
+
 
         <TextView
             android:id="@+id/tv_lesson"

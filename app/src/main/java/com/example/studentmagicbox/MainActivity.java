@@ -2,9 +2,7 @@ package com.example.studentmagicbox;
 import com.example.studentmagicbox.Beans.*;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
-import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
@@ -12,7 +10,6 @@ import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -159,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return filepath;
     }
-    
+
 
     private int  SuccessCount=0;
 
@@ -209,8 +206,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                     fileR.close();
                     String[]s=strsBuffer.split(" ");
-                   userlogin.setText(s[0]);
-                   userpassword.setText(s[1]);
+                    userlogin.setText(s[0]);
+                    userpassword.setText(s[1]);
                     password=s[1];
                 } else {
                     Toast.makeText(this, "该目录下文件不存在", Toast.LENGTH_LONG).show();
@@ -231,8 +228,6 @@ public class MainActivity extends AppCompatActivity {
             loginname=userlogin.getText().toString();
             password=userpassword.getText().toString();
 
-
-
             PyObject o=Python.getInstance().getModule("hello").callAttr("checkUser",loginname,password);
             Boolean success=o.toJava(Boolean.class);
             if(!success)
@@ -241,8 +236,6 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            inputAnimator(mInputLayout, mWidth, mHeight);
-
             // 计算出控件的高与宽
             mWidth = mBtnLogin.getMeasuredWidth();
             mHeight = mBtnLogin.getMeasuredHeight();
@@ -250,15 +243,15 @@ public class MainActivity extends AppCompatActivity {
             mName.setVisibility(View.INVISIBLE);
             mPsw.setVisibility(View.INVISIBLE);
 
+            inputAnimator(mInputLayout, mWidth, mHeight);
 
             FileIOHandler.sendEmptyMessageDelayed(1,0);
-            patchHandler.sendEmptyMessageDelayed(1,0);
-            classHandler.sendEmptyMessageDelayed(1,2000);
-            scheduleHander.sendEmptyMessageDelayed(1,4000);
-            emailHandler.sendEmptyMessageDelayed(1,6000);
+            classHandler.sendEmptyMessageDelayed(1,0);
+            patchHandler.sendEmptyMessageDelayed(1,3000);
+            scheduleHander.sendEmptyMessageDelayed(1,7000);
+            emailHandler.sendEmptyMessageDelayed(1,0);
         });
     }
-
 
 
     private void recovery()
@@ -410,8 +403,8 @@ public class MainActivity extends AppCompatActivity {
                     for(int i=0;i<=6;++i)
                         for(int j=0;j<=6;++j)
                             System.out.println(i+" "+j+scheduleBean.schedule[i][j]);
-                        System.out.println("课表载入成功");
-                        SkipTo();
+                    System.out.println("课表载入成功");
+                    SkipTo();
                 }
             };
             Looper.loop();

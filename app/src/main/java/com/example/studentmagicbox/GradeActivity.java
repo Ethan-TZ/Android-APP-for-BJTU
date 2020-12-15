@@ -2,8 +2,11 @@ package com.example.studentmagicbox;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,7 +22,7 @@ public class GradeActivity extends AppCompatActivity {
     private GradeAdapter Adapter;
     private ListView gradelist;
     private TextView GPA,AVG;
-
+    public static String thisyear="无";
     private void initview() {
         backto=findViewById(R.id.backto);
         gradelist=(ListView)findViewById(R.id.grade_list);
@@ -44,5 +47,6 @@ public class GradeActivity extends AppCompatActivity {
         backto.setOnClickListener(e->{
             startActivity(new Intent(GradeActivity.this,MainContet.class));
             finish(); });
-    }
+
+}
 }

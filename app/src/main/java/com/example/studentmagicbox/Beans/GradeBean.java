@@ -12,12 +12,10 @@ public class GradeBean {
         this.AVG = AVG;
     }
 
-
     public void add_grade(String lesson_year, String lesson_id, String lesson_name, String lesson_weight, String lesson_grade, String lesson_teacher)
     {
         grades.add(new GradeItem(lesson_year,lesson_id,lesson_name,lesson_weight,lesson_grade,lesson_teacher));
     }
-
 
     public class GradeItem {
         public String lesson_year;
@@ -26,6 +24,27 @@ public class GradeBean {
         public String lesson_weight;
         public String lesson_grade;
         public String lesson_teacher;
+
+        public String getLesson_year(){
+            return lesson_year;
+        }
+
+        public String getLesson_name(){
+            return lesson_name;
+        }
+
+        public String getLesson_weight(){
+            return lesson_weight;
+        }
+
+        public String getLesson_grade(){
+            return lesson_grade;
+        }
+
+        public String getLesson_teacher(){
+            return lesson_teacher;
+        }
+
 
         public GradeItem(String lesson_year, String lesson_id, String lesson_name, String lesson_weight, String lesson_grade, String lesson_teacher) {
             this.lesson_year = lesson_year;
@@ -36,12 +55,8 @@ public class GradeBean {
             this.lesson_teacher = lesson_teacher;
         }
 
-        public String getLesson_year(){return lesson_year;}
-        public String getLesson_id(){return lesson_id;}
-        public String getLesson_name(){return lesson_name;}
-        public String getLesson_weight(){return lesson_weight;}
-        public String getLesson_grade(){return lesson_grade;}
-        public String getLesson_teacher(){return lesson_teacher;}
+
+
 
         @Override
         public String toString() {
@@ -55,4 +70,5 @@ public class GradeBean {
                     '}';
         }
     }
+
 }

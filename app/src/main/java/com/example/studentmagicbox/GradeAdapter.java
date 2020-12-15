@@ -41,8 +41,6 @@ public class GradeAdapter extends BaseAdapter {
         //View view = super.getView(position, convertView, parent);
         ViewHolder viewHolder=null;
 
-
-
         if (convertView == null) {
             //缓存
             viewHolder=new ViewHolder();
@@ -51,7 +49,6 @@ public class GradeAdapter extends BaseAdapter {
 
             // 从view对象里面找到对应的textView
             viewHolder.lesson_year=convertView.findViewById(R.id.tv_lessonyear);
-            viewHolder.lesson_id = convertView.findViewById(R.id.tv_lessonid);
             viewHolder.lesson_name=convertView.findViewById(R.id.tv_lesson);
             viewHolder.lesson_weight=convertView.findViewById(R.id.tv_lessonweight);
             viewHolder.lesson_grade = convertView.findViewById(R.id.tv_grade);
@@ -65,18 +62,18 @@ public class GradeAdapter extends BaseAdapter {
         List<GradeBean.GradeItem> list=new ArrayList<>(MainActivity.gradeBean.grades);
         GradeBean.GradeItem item=list.get(position);
         if (item!=null){
-            viewHolder.lesson_year.setText(item.getLesson_year());
-            viewHolder.lesson_year.setTextColor(Color.WHITE);
-            viewHolder.lesson_id.setText(item.getLesson_id());
-            viewHolder.lesson_id.setTextColor(Color.WHITE);
-            viewHolder.lesson_name.setText(item.getLesson_name());
-            viewHolder.lesson_name.setTextColor(Color.WHITE);
-            viewHolder.lesson_weight.setText(item.getLesson_weight());
-            viewHolder.lesson_weight.setTextColor(Color.WHITE);
-            viewHolder.lesson_grade.setText(item.getLesson_grade());
-            viewHolder.lesson_grade.setTextColor(Color.WHITE);
-            viewHolder.lesson_teacher.setText(item.getLesson_teacher());
-            viewHolder.lesson_teacher.setTextColor(Color.WHITE);
+                viewHolder.lesson_year.setText(item.getLesson_year());
+                viewHolder.lesson_year.setTextColor(Color.WHITE);
+                viewHolder.lesson_name.setText(item.getLesson_name());
+                viewHolder.lesson_name.setTextColor(Color.WHITE);
+                viewHolder.lesson_weight.setText(item.getLesson_weight());
+                viewHolder.lesson_weight.setTextColor(Color.WHITE);
+                viewHolder.lesson_grade.setText(item.getLesson_grade());
+                viewHolder.lesson_grade.setTextColor(Color.WHITE);
+                viewHolder.lesson_teacher.setText(item.getLesson_teacher());
+                viewHolder.lesson_teacher.setTextColor(Color.WHITE);
+
+
         }
         if (position%2==0)
             convertView.setBackgroundColor(colors[0]);
@@ -88,7 +85,6 @@ public class GradeAdapter extends BaseAdapter {
     //使用viewHolder实现提高效率和复用
     public class ViewHolder{
         private TextView lesson_year;
-        private TextView lesson_id;
         private TextView lesson_name;
         private TextView lesson_weight;
         private TextView lesson_grade;

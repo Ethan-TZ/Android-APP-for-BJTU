@@ -18,7 +18,9 @@
         android:layout_below="@id/content_title"
         android:layout_marginTop="2dp"
         android:orientation="vertical">
-    <LinearLayout
+
+
+        <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:background="@color/TiYiBlue"
@@ -47,14 +49,6 @@
             android:orientation="horizontal"
             android:background="@color/TiYiBlue"
             >
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_height="wrap_content"
-                android:layout_width="80dp"
-                android:textSize="17dp"
-                android:textColor="@color/white"
-                android:text="课程号" />
 
             <TextView
                 android:id="@+id/textView4"
